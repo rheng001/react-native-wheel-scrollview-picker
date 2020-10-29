@@ -1,0 +1,25 @@
+{
+  "name": "react-native-wheel-scrollview-picker",
+  "version": "1.0.0",
+  "description": "A pure js picker for React Native",
+  "main": "index.js",
+  "scripts": {
+    "test": "test \"jest\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rheng001/react-native-wheel-scrollview-picker.git"
+  },
+  "keywords": [
+    "picker",
+    "wheel",
+    "react-native",
+    "react-native-picker"
+  ],
+  "author": "rheng001",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rheng001/react-native-wheel-scrollview-picker/issues"
+  },
+  "homepage": "https://github.com/rheng001/react-native-wheel-scrollview-picker#readme"
+}
