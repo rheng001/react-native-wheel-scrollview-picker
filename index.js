@@ -281,7 +281,7 @@ ScrollPicker.propTypes = {
   nestedScrollEnabled: PropTypes.bool,
 };
 ScrollPicker.defaultProps = {
-  dataSource: [1, 2, 3],
+  dataSource: ["1", "2", "3", "4", "5", "6"],
   itemHeight: 60,
   wrapperBackground: "#FFFFFF",
   wrapperHeight: 180,
