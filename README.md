@@ -1,13 +1,12 @@
 <h1 align="center">react-native-wheel-scrollview-picker</h1>
-
- [![NPM](https://img.shields.io/npm/v/react-native-wheel-scrollview-picker?style=flat-square)](https://www.npmjs.com/package/react-native-wheel-scrollview-picker)
  
  <p align="center">
    <img src="./demo.gif">
- 
 </p>
   
 <p align="center">A pure js picker for React Native</h1>
+
+<p align="center"> <img src="https://img.shields.io/npm/v/react-native-wheel-scrollview-picker?style=flat-square" alt="https://www.npmjs.com/package/react-native-wheel-scrollview-picker" /> </p>
 
 > - Original repository by @veizz: [react-native-picker-scrollview](https://github.com/veizz/react-native-picker-scrollview).
 > - Fork by @yasemincidem who added the real cross platform behavior and datepicker [react-native-wheel-scroll-picker](https://github.com/yasemincidem/react-native-picker-scrollview).
