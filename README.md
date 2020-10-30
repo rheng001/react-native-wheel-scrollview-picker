@@ -42,9 +42,9 @@ export default class SimpleExample extends Component {
   render() {
     return (
       <ScrollPicker
-        dataSource={["a", "b", "c", "d"]}
+        dataSource={["1", "2", "3", "4", "5", "6"]}
         selectedIndex={1}
-        renderItem={(data, index, isSelected) => {
+        renderItem={(data, index) => {
           //
         }}
         onValueChange={(data, selectedIndex) => {
@@ -56,8 +56,6 @@ export default class SimpleExample extends Component {
         itemHeight={60}
         highlightColor={"#d8d8d8"}
         highlightBorderWidth={2}
-        activeItemColor={"#222121"}
-        itemColor={"#B4B4B4"}
       />
     );
   }
@@ -68,7 +66,7 @@ export default class SimpleExample extends Component {
 
 | Props                |                                                                                                      Description                                                                                                       |   Type   |  Default |
 | -------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------: | -------: |
-| data           |                                                                        Data of the picker Item                                                                         | Array|          |
+| dataSource           |                                                                        Data of the picker                                                                          | Array|          |
 | selectedIndex      |                                                                 selected index of the item                                                                  |  number  |        1 |
 | wrapperHeight               |                                                                                       height of the picker                                                                                        | number  |    |
 | wrapperWidth |                                                                           width of the picker                                                                            |  number  |          |
@@ -76,8 +74,8 @@ export default class SimpleExample extends Component {
 | itemHeight         | height of eacch item |  number  |      |
 | highlightColor      |                                                                   color of the indicator line                                                                   |   number   | 1 |
 | highlightBorderWidth          |                                 width of the indicator                                 |  string  |     "#d8d8d8"     |
-| activeItemColor            |                                 color of the active item                                  |  string |   '#222121'       |
-| itemColor | color of the items | string| '#B4B4B4'|
+| activeItemTextStyle            |                                 Active Item Text object style                                  |  object |          |
+| itemTextStyle | Item Text object style | object | |
 
 ## Author
 
