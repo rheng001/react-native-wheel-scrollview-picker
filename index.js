@@ -19,8 +19,8 @@ const opacities = {
 
 const sizeText = {
   0: 20,
-  1: 15,
-  2: 10,
+  1: 19,
+  2: 18,
 };
 
 const Container = (props) => {
@@ -62,7 +62,7 @@ export const SelectedItem = (props) => {
 
   return (
     <View style={style}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => {props.onPress(props.name)}}>
         <Text
           style={
             props.isSelected
@@ -169,6 +169,7 @@ export default class ScrollPicker extends React.Component {
         name={data}
         activeItemTextStyle={this.props.activeItemTextStyle}
         itemTextStyle={this.props.itemTextStyle}
+        onPress={this.props.onPress}
       />
     );
   }
@@ -279,6 +280,7 @@ ScrollPicker.propTypes = {
   onMomentumScrollEnd: PropTypes.func,
   onScrollEndDrag: PropTypes.func,
   nestedScrollEnabled: PropTypes.bool,
+  onPress: PropTypes.func
 };
 ScrollPicker.defaultProps = {
   dataSource: ["1", "2", "3", "4", "5", "6"],
