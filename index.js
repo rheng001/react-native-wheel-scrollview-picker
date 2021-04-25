@@ -62,7 +62,11 @@ export const SelectedItem = (props) => {
 
   return (
     <View style={style}>
-      <TouchableOpacity onPress={() => {props.onPress(props.name)}}>
+      <TouchableOpacity
+        onPress={() => {
+          props.onPress(props.name);
+        }}
+      >
         <Text
           style={
             props.isSelected
@@ -76,6 +80,8 @@ export const SelectedItem = (props) => {
     </View>
   );
 };
+
+const deviceWidth = Dimensions.get("window").width;
 
 export default class ScrollPicker extends React.Component {
   constructor(props) {
@@ -280,7 +286,7 @@ ScrollPicker.propTypes = {
   onMomentumScrollEnd: PropTypes.func,
   onScrollEndDrag: PropTypes.func,
   nestedScrollEnabled: PropTypes.bool,
-  onPress: PropTypes.func
+  onPress: PropTypes.func,
 };
 ScrollPicker.defaultProps = {
   dataSource: ["1", "2", "3", "4", "5", "6"],
@@ -288,7 +294,7 @@ ScrollPicker.defaultProps = {
   wrapperBackground: "#FFFFFF",
   wrapperHeight: 180,
   wrapperWidth: 150,
-  highlightWidth: "100%",
+  highlightWidth: deviceWidth,
   highlightBorderWidth: 2,
   highlightColor: "#333",
   onMomentumScrollEnd: () => {},
