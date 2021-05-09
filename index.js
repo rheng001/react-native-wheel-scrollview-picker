@@ -90,7 +90,7 @@ export default class ScrollPicker extends React.Component {
     this.onMomentumScrollEnd = this.onMomentumScrollEnd.bind(this);
     this.onScrollBeginDrag = this.onScrollBeginDrag.bind(this);
     this.onScrollEndDrag = this.onScrollEndDrag.bind(this);
-    // this.renderItem = this.props.renderItem.bind(this);
+    this.renderItem = this.props.renderItem.bind(this);
     this.state = {
       selectedIndex: 1,
     };
