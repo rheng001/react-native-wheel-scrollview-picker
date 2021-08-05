@@ -1,314 +1,146 @@
-import React from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  Dimensions,
-  Platform,
-  TouchableOpacity,
-} from "react-native";
-import PropTypes from "prop-types";
-
-const opacities = {
-  0: 1,
-  1: 1,
-  2: 0.6,
-  3: 0.3,
-  4: 0.1,
-};
-
-const sizeText = {
-  0: 20,
-  1: 19,
-  2: 18,
-};
-
-const Container = (props) => {
-  const style = {
-    height: props.wrapperHeight,
-    flex: 1,
-    overflow: "hidden",
-    alignSelf: "center",
-    width: props.wrapperWidth,
-    backgroundColor: props.wrapperBackground,
-  };
-  return <View style={style}>{props.children}</View>;
-};
-
-export const HighLightView = (props) => {
-  return (
-    <View
-      style={{
-        position: "absolute",
-        top: (props.wrapperHeight - props.itemHeight) / 2,
-        height: props.itemHeight,
-        width: props.highlightWidth,
-        borderTopColor: props.highlightColor,
-        borderBottomColor: props.highlightColor,
-        borderTopWidth: props.highlightBorderWidth,
-        borderBottomWidth: props.highlightBorderWidth,
-      }}
-    />
-  );
-};
-
-export const SelectedItem = (props) => {
-  const style = {
-    opacity: props.isSelected ? null : props.opacity,
-    height: props.itemHeight,
-    justifyContent: "center",
-    alignItems: "center",
-  };
-
-  return (
-    <View style={style}>
-      <TouchableOpacity
-        onPress={() => {
-          props.onPress(props.name);
-        }}
-      >
-        <Text
-          style={
-            props.isSelected
-              ? [props.activeItemTextStyle, { fontSize: props.fontSize }]
-              : [props.itemTextStyle, { fontSize: props.fontSize }]
-          }
-        >
-          {props.name}
-        </Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
-
-const deviceWidth = Dimensions.get("window").width;
-
-export default class ScrollPicker extends React.Component {
-  constructor(props) {
-    super(props);
-    this.onMomentumScrollBegin = this.onMomentumScrollBegin.bind(this);
-    this.onMomentumScrollEnd = this.onMomentumScrollEnd.bind(this);
-    this.onScrollBeginDrag = this.onScrollBeginDrag.bind(this);
-    this.onScrollEndDrag = this.onScrollEndDrag.bind(this);
-    this.renderItem = this.props.renderItem.bind(this);
-    this.state = {
-      selectedIndex: 1,
-    };
-  }
-
-  componentDidMount() {
-    if (this.props.selectedIndex !== null) {
-      this.scrollToIndex(this.props.selectedIndex);
-    }
-  }
-
-  componentWillUnmount() {
-    if (this.timer) {
-      clearTimeout(this.timer);
-    }
-  }
-
-  render() {
-    const { header, footer } = this.renderPlaceHolder();
-    return (
-      <Container
-        wrapperHeight={this.props.wrapperHeight}
-        wrapperWidth={this.props.wrapperWidth}
-        wrapperBackground={this.props.wrapperBackground}
-      >
-        <HighLightView
-          highlightColor={this.props.highlightColor}
-          highlightWidth={this.props.highlightWidth}
-          wrapperHeight={this.props.wrapperHeight}
-          itemHeight={this.props.itemHeight}
-          highlightBorderWidth={this.props.highlightBorderWidth}
-        />
-        <ScrollView
-          ref={(sview) => {
-            this.sview = sview;
-          }}
-          bounces={false}
-          showsVerticalScrollIndicator={false}
-          onTouchStart={this.props.onTouchStart}
-          onMomentumScrollBegin={this.onMomentumScrollBegin}
-          onMomentumScrollEnd={this.onMomentumScrollEnd}
-          onScrollBeginDrag={this.onScrollBeginDrag}
-          onScrollEndDrag={this.onScrollEndDrag}
-          nestedScrollEnabled={this.props.nestedScrollEnabled}
-        >
-          {header}
-          {this.props.dataSource.map(this.renderItem.bind(this))}
-          {footer}
-        </ScrollView>
-      </Container>
-    );
-  }
-
-  renderPlaceHolder() {
-    const height = (this.props.wrapperHeight - this.props.itemHeight) / 2;
-    const header = <View style={{ height, flex: 1 }}></View>;
-    const footer = <View style={{ height, flex: 1 }}></View>;
-    return { header, footer };
-  }
-
-  renderItem(data, index, indexSelected) {
-    const isSelected = index === this.state.selectedIndex;
-    const selected = this.state.selectedIndex;
-    const gap = Math.abs(index - selected);
-
-    let opacity = opacities[gap];
-    if (gap > 3) {
-      opacity = opacities[2];
-    }
-    let fontSize = sizeText[gap];
-    if (gap > 1) {
-      fontSize = sizeText[2];
-    }
-
-    return (
-      <SelectedItem
-        key={index}
-        itemHeight={this.props.itemHeight}
-        opacity={opacity}
-        fontSize={fontSize}
-        isSelected={isSelected}
-        name={data}
-        activeItemTextStyle={this.props.activeItemTextStyle}
-        itemTextStyle={this.props.itemTextStyle}
-        onPress={this.props.onPress}
-      />
-    );
-  }
-
-  scrollFix(e) {
-    let verticalY = 0;
-    const h = this.props.itemHeight;
-    if (e.nativeEvent.contentOffset) {
-      verticalY = e.nativeEvent.contentOffset.y;
-    }
-    const selectedIndex = Math.round(verticalY / h);
-    const verticalElem = selectedIndex * h;
-    if (verticalElem !== verticalY) {
-      // using scrollTo in ios, onMomentumScrollEnd will be invoked
-      if (Platform.OS === "ios") {
-        this.isScrollTo = true;
-      }
-      if (this.sview) {
-        this.sview.scrollTo({ y: verticalElem });
-      }
-    }
-    if (this.state.selectedIndex === selectedIndex) {
-      return;
-    }
-    this.setState({
-      selectedIndex,
-    });
-    // onValueChange
-    if (this.props.onValueChange) {
-      const selectedValue = this.props.dataSource[selectedIndex];
-      this.props.onValueChange(selectedValue, selectedIndex);
-    }
-  }
-
-  onScrollBeginDrag() {
-    this.dragStarted = true;
-    if (Platform.OS === "ios") {
-      this.isScrollTo = false;
-    }
-    if (this.timer) {
-      clearTimeout(this.timer);
-    }
-  }
-
-  onScrollEndDrag(e) {
-    this.props.onScrollEndDrag();
-    this.dragStarted = false;
-    // if not used, event will be garbaged
-    const element = {
-      nativeEvent: {
-        contentOffset: {
-          y: e.nativeEvent.contentOffset.y,
-        },
-      },
-    };
-    if (this.timer) {
-      clearTimeout(this.timer);
-    }
-    this.timer = setTimeout(() => {
-      if (!this.momentumStarted && !this.dragStarted) {
-        this.scrollFix(element, "timeout");
-      }
-    }, 10);
-  }
-
-  onMomentumScrollBegin() {
-    this.momentumStarted = true;
-    if (this.timer) {
-      clearTimeout(this.timer);
-    }
-  }
-
-  onMomentumScrollEnd(e) {
-    this.props.onMomentumScrollEnd();
-    this.momentumStarted = false;
-    if (!this.isScrollTo && !this.momentumStarted && !this.dragStarted) {
-      this.scrollFix(e);
-    }
-  }
-
-  scrollToIndex(ind) {
-    this.setState({
-      selectedIndex: ind,
-    });
-    const y = this.props.itemHeight * ind;
-    setTimeout(() => {
-      if (this.sview) {
-        this.sview.scrollTo({ y });
-      }
-    }, 0);
-  }
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Dimensions, Platform, ScrollView, StyleSheet, Text, View, } from "react-native";
+function isNumeric(str) {
+    if (typeof str === "number")
+        return true;
+    if (typeof str !== "string")
+        return false;
+    return (!isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+        !isNaN(parseFloat(str))); // ...and ensure strings of whitespace fail
 }
-ScrollPicker.propTypes = {
-  style: PropTypes.object,
-  dataSource: PropTypes.array,
-  selectedIndex: PropTypes.number,
-  onValueChange: PropTypes.func,
-  renderItem: PropTypes.func,
-  highlightColor: PropTypes.string,
-  itemHeight: PropTypes.number,
-  wrapperBackground: PropTypes.string,
-  wrapperWidth: PropTypes.number,
-  wrapperHeight: PropTypes.number,
-  highlightWidth: PropTypes.number,
-  highlightBorderWidth: PropTypes.number,
-  itemTextStyle: PropTypes.object,
-  activeItemTextStyle: PropTypes.object,
-  onMomentumScrollEnd: PropTypes.func,
-  onScrollEndDrag: PropTypes.func,
-  nestedScrollEnabled: PropTypes.bool,
-  onPress: PropTypes.func,
+const deviceWidth = Dimensions.get("window").width;
+const isViewStyle = (style) => {
+    return (typeof style === "object" &&
+        style !== null &&
+        Object.keys(style).includes("height"));
 };
-ScrollPicker.defaultProps = {
-  dataSource: ["1", "2", "3", "4", "5", "6"],
-  itemHeight: 60,
-  wrapperBackground: "#FFFFFF",
-  wrapperHeight: 180,
-  wrapperWidth: 150,
-  highlightWidth: deviceWidth,
-  highlightBorderWidth: 2,
-  highlightColor: "#333",
-  onMomentumScrollEnd: () => {},
-  onScrollEndDrag: () => {},
-  itemTextStyle: {
-    fontSize: 20,
-    lineHeight: 26,
-    textAlign: "center",
-    color: "#B4B4B4",
-  },
-  activeItemTextStyle: {
-    fontSize: 20,
-    lineHeight: 26,
-    textAlign: "center",
-    color: "#222121",
-  },
-};
+export function ScrollPicker({ itemHeight = 30, style, ...props }) {
+    const [initialized, setInitialized] = useState(false);
+    const [selectedIndex, setSelectedIndex] = useState(props.selectedIndex && props.selectedIndex >= 0 ? props.selectedIndex : 0);
+    const sView = useRef(null);
+    const [isScrollTo, setIsScrollTo] = useState(false);
+    const [dragStarted, setDragStarted] = useState(false);
+    const [momentumStarted, setMomentumStarted] = useState(false);
+    const [timer, setTimer] = useState(null);
+    const wrapperHeight = props.wrapperHeight ||
+        (isViewStyle(style) && isNumeric(style.height)
+            ? Number(style.height)
+            : 0) ||
+        itemHeight * 5;
+    useEffect(function initialize() {
+        if (initialized)
+            return;
+        setInitialized(true);
+        setTimeout(() => {
+            const y = itemHeight * selectedIndex;
+            sView?.current?.scrollTo({ y: y });
+        }, 0);
+        return () => {
+            timer && clearTimeout(timer);
+        };
+    }, [initialized, itemHeight, selectedIndex, sView, timer]);
+    const renderPlaceHolder = () => {
+        const h = (wrapperHeight - itemHeight) / 2;
+        const header = React.createElement(View, { style: { height: h, flex: 1 } });
+        const footer = React.createElement(View, { style: { height: h, flex: 1 } });
+        return { header, footer };
+    };
+    const renderItem = (data, index) => {
+        const isSelected = index === selectedIndex;
+        const item = props.renderItem ? (props.renderItem(data, index, isSelected)) : (React.createElement(Text, { style: isSelected
+                ? [styles.itemText, styles.itemTextSelected]
+                : styles.itemText }, data));
+        return (React.createElement(View, { style: [styles.itemWrapper, { height: itemHeight }], key: index }, item));
+    };
+    const scrollFix = useCallback((e) => {
+        let y = 0;
+        const h = itemHeight;
+        if (e.nativeEvent.contentOffset) {
+            y = e.nativeEvent.contentOffset.y;
+        }
+        const _selectedIndex = Math.round(y / h);
+        const _y = _selectedIndex * h;
+        if (_y !== y) {
+            // using scrollTo in ios, onMomentumScrollEnd will be invoked
+            if (Platform.OS === "ios") {
+                setIsScrollTo(true);
+            }
+            sView?.current?.scrollTo({ y: _y });
+        }
+        if (selectedIndex === _selectedIndex) {
+            return;
+        }
+        // onValueChange
+        if (props.onValueChange) {
+            const selectedValue = props.dataSource[_selectedIndex];
+            setSelectedIndex(_selectedIndex);
+            props.onValueChange(selectedValue, _selectedIndex);
+        }
+    }, [itemHeight, props, selectedIndex]);
+    const onScrollBeginDrag = () => {
+        setDragStarted(true);
+        if (Platform.OS === "ios") {
+            setIsScrollTo(false);
+        }
+        timer && clearTimeout(timer);
+    };
+    const onScrollEndDrag = (e) => {
+        setDragStarted(false);
+        // if not used, event will be garbaged
+        const _e = { ...e };
+        timer && clearTimeout(timer);
+        setTimer(setTimeout(() => {
+            if (!momentumStarted) {
+                scrollFix(_e);
+            }
+        }, 50));
+    };
+    const onMomentumScrollBegin = () => {
+        setMomentumStarted(true);
+        timer && clearTimeout(timer);
+    };
+    const onMomentumScrollEnd = (e) => {
+        setMomentumStarted(false);
+        if (!isScrollTo && !dragStarted) {
+            scrollFix(e);
+        }
+    };
+    const { header, footer } = renderPlaceHolder();
+    const highlightWidth = (isViewStyle(style) ? style.width : 0) || deviceWidth;
+    const highlightColor = props.highlightColor || "#333";
+    const wrapperStyle = {
+        height: wrapperHeight,
+        flex: 1,
+        backgroundColor: props.wrapperColor || "#fafafa",
+        overflow: "hidden",
+    };
+    const highlightStyle = {
+        position: "absolute",
+        top: (wrapperHeight - itemHeight) / 2,
+        height: itemHeight,
+        width: highlightWidth,
+        borderTopColor: highlightColor,
+        borderBottomColor: highlightColor,
+        borderTopWidth: StyleSheet.hairlineWidth,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+    };
+    return (React.createElement(View, { style: wrapperStyle },
+        React.createElement(View, { style: highlightStyle }),
+        React.createElement(ScrollView, { ref: sView, bounces: false, showsVerticalScrollIndicator: false, onMomentumScrollBegin: (_e) => onMomentumScrollBegin(), onMomentumScrollEnd: (e) => onMomentumScrollEnd(e), onScrollBeginDrag: (_e) => onScrollBeginDrag(), onScrollEndDrag: (e) => onScrollEndDrag(e) },
+            header,
+            props.dataSource.map(renderItem),
+            footer)));
+}
+const styles = StyleSheet.create({
+    itemWrapper: {
+        height: 30,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    itemText: {
+        color: "#999",
+    },
+    itemTextSelected: {
+        color: "#333",
+    },
+});
