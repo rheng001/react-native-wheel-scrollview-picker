@@ -4,7 +4,8 @@
   "description": "A pure js picker for React Native",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"No test specified\""
+    "test": "echo \"No test specified\"",
+    "prepublish": "tsc"
   },
   "repository": {
     "type": "git",
@@ -21,5 +22,20 @@
   "bugs": {
     "url": "https://github.com/rheng001/react-native-wheel-scrollview-picker/issues"
   },
-  "homepage": "https://github.com/rheng001/react-native-wheel-scrollview-picker#readme"
+  "homepage": "https://github.com/rheng001/react-native-wheel-scrollview-picker#readme",
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*",
+    "typescript": "*",
+    "@types/react": "*",
+    "@types/react-native": "*"
+  },
+  "devDependencies": {
+    "react": "^17.0.2",
+    "react-native": "^0.64.2",
+    "typescript": "^4.3.5",
+    "@types/react": "^17.0.15",
+    "@types/react-native": "^0.64.12"
+  },
+  "types": "index.d.ts"
 }
