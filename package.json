@@ -2,7 +2,7 @@
   "name": "react-native-wheel-scrollview-picker",
   "version": "1.2.1",
   "description": "A pure js picker for React Native",
-  "main": "index.js",
+  "main": "index.tsx",
   "scripts": {
     "test": "echo \"No test specified\"",
     "prepublish": "tsc"
