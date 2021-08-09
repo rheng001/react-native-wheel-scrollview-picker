@@ -14,7 +14,7 @@ const isViewStyle = (style) => {
         style !== null &&
         Object.keys(style).includes("height"));
 };
-export function ScrollPicker({ itemHeight = 30, style, ...props }) {
+export default function ScrollPicker({ itemHeight = 30, style, ...props }) {
     const [initialized, setInitialized] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(props.selectedIndex && props.selectedIndex >= 0 ? props.selectedIndex : 0);
     const sView = useRef(null);
