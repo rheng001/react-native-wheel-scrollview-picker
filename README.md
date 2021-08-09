@@ -51,9 +51,9 @@ export default class SimpleExample extends Component {
         }}
         wrapperHeight={180}
         wrapperWidth={150}
-        wrapperBackground={'#FFFFFF'}
+        wrapperBackground='#FFFFFF'
         itemHeight={60}
-        highlightColor={'#d8d8d8'}
+        highlightColor='#d8d8d8'
         highlightBorderWidth={2}
       />
     );
