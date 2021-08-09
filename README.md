@@ -15,13 +15,12 @@
 ---
 
 ## Table of Contents
-
-- [Table of Contents](#table-of-contents)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Props](#props)
-- [Author](#author)
-- [License](#license)
+1. [Features](#features)
+2. [Installation](#installation)
+3. [Usage](#usage)
+   - [Example](#usage)
+4. [Props](#props)
+5. [License](#license)
 
 ## Installation
 
