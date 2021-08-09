@@ -51,7 +51,7 @@ export type ScrollPickerProps = {
   wrapperColor?: string;
 };
 
-export function ScrollPicker({
+export default function ScrollPicker({
   itemHeight = 30,
   style,
   ...props
