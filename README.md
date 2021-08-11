@@ -68,7 +68,7 @@ export default class SimpleExample extends Component {
 | selectedIndex        |  selected index of the item   | number |         1 |
 | wrapperHeight        |     height of the picker      | number |           |
 | wrapperWidth         |      width of the picker      | number |           |
-| wrapperBackground    |       picker background       | string |    '#FFF' |
+| wrapperColor         |       picker background       | string | "#fafafa" |
 | itemHeight           |      height of each item      | number |           |
 | highlightColor       |  color of the indicator line  | number |         1 |
 | highlightBorderWidth |    width of the indicator     | string | "#d8d8d8" |
