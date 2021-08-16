@@ -10,6 +10,7 @@ import {
   View,
   ViewProps,
   ViewStyle,
+  TextProps,
 } from "react-native";
 
 function isNumeric(str: string | unknown): boolean {
@@ -49,11 +50,21 @@ export type ScrollPickerProps = {
   itemHeight?: number;
   wrapperHeight?: number;
   wrapperColor?: string;
+  highlightBorderWidth?: number;
+  selectedTextStyle?: TextProps["style"];
+  textStyle?: TextProps["style"];
+
+  disabledIndexLessThan?: number;
+  disabledIndexMoreThan?: number;
+  initialIndex?: number;
 };
 
 export default function ScrollPicker({
   itemHeight = 30,
   style,
+  highlightBorderWidth,
+  textStyle,
+  selectedTextStyle,
   ...props
 }: ScrollPickerProps): JSX.Element {
   const [initialized, setInitialized] = useState(false);
@@ -101,15 +112,21 @@ export default function ScrollPicker({
     data: ScrollPickerProps["dataSource"][0],
     index: number
   ) => {
-    const isSelected = index === selectedIndex;
-    const item = props.renderItem ? (
-      props.renderItem(data, index, isSelected)
-    ) : (
+    const isSelected = props.initialIndex ? index === props.initialIndex : index === props.selectedIndex;
+
+    let additionalStyle = {}
+    if (props.disabledIndexMoreThan && index >= props.disabledIndexMoreThan) {
+      additionalStyle = styles.disabled;
+    } else if (props.disabledIndexLessThan && index <= props.disabledIndexLessThan) {
+      additionalStyle = styles.disabled;
+    }
+
+    const item = (
       <Text
         style={
           isSelected
-            ? [styles.itemText, styles.itemTextSelected]
-            : styles.itemText
+            ? [styles.itemText, styles.itemTextSelected, selectedTextStyle, additionalStyle]
+            : [styles.itemText, textStyle, additionalStyle]
         }
       >
         {data}
@@ -130,8 +147,16 @@ export default function ScrollPicker({
         y = e.nativeEvent.contentOffset.y;
       }
       const _selectedIndex = Math.round(y / h);
+      let _y;
 
-      const _y = _selectedIndex * h;
+      if (props.disabledIndexLessThan && selectedIndex <= props.disabledIndexLessThan) {
+        _y = props.disabledIndexLessThan * h;
+      } else if (props.disabledIndexMoreThan && selectedIndex >= props.disabledIndexMoreThan) {
+        _y = props.disabledIndexMoreThan * h;
+      } else {
+        _y = _selectedIndex * h;
+      }
+
       if (_y !== y) {
         // using scrollTo in ios, onMomentumScrollEnd will be invoked
         if (Platform.OS === "ios") {
@@ -206,8 +231,8 @@ export default function ScrollPicker({
     width: highlightWidth,
     borderTopColor: highlightColor,
     borderBottomColor: highlightColor,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderTopWidth: highlightBorderWidth || 1,
+    borderBottomWidth: highlightBorderWidth || 1,
   };
 
   return (
@@ -241,5 +266,9 @@ const styles = StyleSheet.create({
   },
   itemTextSelected: {
     color: "#333",
+    fontWeight: '600'
   },
+  disabled: {
+    color: "#aaa"
+  }
 });
