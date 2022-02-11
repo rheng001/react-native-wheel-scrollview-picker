@@ -219,6 +219,7 @@ export default function ScrollPicker({
         ref={sView}
         bounces={false}
         showsVerticalScrollIndicator={false}
+        nestedScrollEnabled
         onMomentumScrollBegin={(_e) => onMomentumScrollBegin()}
         onMomentumScrollEnd={(e) => onMomentumScrollEnd(e)}
         onScrollBeginDrag={(_e) => onScrollBeginDrag()}
