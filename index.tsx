@@ -45,7 +45,7 @@ export type ScrollPickerProps = {
     isSelected: boolean
   ) => JSX.Element;
   highlightColor?: string;
-
+  highlightBorderWidth?: number;
   itemHeight?: number;
   wrapperHeight?: number;
   wrapperColor?: string;
@@ -191,6 +191,8 @@ export default function ScrollPicker({
   const { header, footer } = renderPlaceHolder();
   const highlightWidth = (isViewStyle(style) ? style.width : 0) || deviceWidth;
   const highlightColor = props.highlightColor || "#333";
+  const highlightBorderWidth =
+    props.highlightBorderWidth || StyleSheet.hairlineWidth;
 
   const wrapperStyle: ViewStyle = {
     height: wrapperHeight,
@@ -206,8 +208,8 @@ export default function ScrollPicker({
     width: highlightWidth,
     borderTopColor: highlightColor,
     borderBottomColor: highlightColor,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderTopWidth: highlightBorderWidth,
+    borderBottomWidth: highlightBorderWidth,
   };
 
   return (

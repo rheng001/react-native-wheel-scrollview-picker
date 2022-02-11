@@ -70,8 +70,8 @@ export default class SimpleExample extends Component {
 | wrapperWidth         |      width of the picker      | number |           |
 | wrapperBackground    |       picker background       | string |    '#FFF' |
 | itemHeight           |      height of each item      | number |           |
-| highlightColor       |  color of the indicator line  | number |         1 |
-| highlightBorderWidth |    width of the indicator     | string | "#d8d8d8" |
+| highlightColor       |  color of the indicator line  | number | "#d8d8d8" |
+| highlightBorderWidth |    width of the indicator     | string |         1 |
 | activeItemTextStyle  | Active Item Text object style | object |           |
 | itemTextStyle        |    Item Text object style     | object |           |
 
