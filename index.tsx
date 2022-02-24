@@ -49,6 +49,9 @@ export type ScrollPickerProps = {
   itemHeight?: number;
   wrapperHeight?: number;
   wrapperColor?: string;
+  // TODO: add proper type to `scrollViewComponent` prop
+  // tried using ComponentType<ScrollViewProps & { ref: React.RefObject<ScrollView> }>
+  // but ScrollView component from react-native-gesture=handler is not compatible with this.
   scrollViewComponent?: any;
 };
 
