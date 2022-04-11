@@ -49,11 +49,16 @@ export type ScrollPickerProps = {
   itemHeight?: number;
   wrapperHeight?: number;
   wrapperColor?: string;
+  // TODO: add proper type to `scrollViewComponent` prop
+  // tried using ComponentType<ScrollViewProps & { ref: React.RefObject<ScrollView> }>
+  // but ScrollView component from react-native-gesture=handler is not compatible with this.
+  scrollViewComponent?: any;
 };
 
 export default function ScrollPicker({
   itemHeight = 30,
   style,
+  scrollViewComponent,
   ...props
 }: ScrollPickerProps): JSX.Element {
   const [initialized, setInitialized] = useState(false);
@@ -212,23 +217,29 @@ export default function ScrollPicker({
     borderBottomWidth: highlightBorderWidth,
   };
 
+  const CustomScrollViewComponent = scrollViewComponent || ScrollView;
+
   return (
     <View style={wrapperStyle}>
       <View style={highlightStyle} />
-      <ScrollView
+      <CustomScrollViewComponent
         ref={sView}
         bounces={false}
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled
-        onMomentumScrollBegin={(_e) => onMomentumScrollBegin()}
-        onMomentumScrollEnd={(e) => onMomentumScrollEnd(e)}
-        onScrollBeginDrag={(_e) => onScrollBeginDrag()}
-        onScrollEndDrag={(e) => onScrollEndDrag(e)}
+        onMomentumScrollBegin={(_e: any) => onMomentumScrollBegin()}
+        onMomentumScrollEnd={(e: NativeSyntheticEvent<NativeScrollEvent>) =>
+          onMomentumScrollEnd(e)
+        }
+        onScrollBeginDrag={(_e: any) => onScrollBeginDrag()}
+        onScrollEndDrag={(e: NativeSyntheticEvent<NativeScrollEvent>) =>
+          onScrollEndDrag(e)
+        }
       >
         {header}
         {props.dataSource.map(renderItem)}
         {footer}
-      </ScrollView>
+      </CustomScrollViewComponent>
     </View>
   );
 }
