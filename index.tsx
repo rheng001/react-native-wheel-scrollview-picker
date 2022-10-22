@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useImperativeHandle,
+} from "react";
 import {
   Dimensions,
   NativeScrollEvent,
@@ -55,12 +61,8 @@ export type ScrollPickerProps = {
   scrollViewComponent?: any;
 };
 
-export default function ScrollPicker({
-  itemHeight = 30,
-  style,
-  scrollViewComponent,
-  ...props
-}: ScrollPickerProps): JSX.Element {
+const ScrollPicker = React.forwardRef((propsState: ScrollPickerProps, ref) => {
+  const { itemHeight = 30, style, scrollViewComponent, ...props } = propsState;
   const [initialized, setInitialized] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(
     props.selectedIndex && props.selectedIndex >= 0 ? props.selectedIndex : 0
@@ -70,6 +72,13 @@ export default function ScrollPicker({
   const [dragStarted, setDragStarted] = useState(false);
   const [momentumStarted, setMomentumStarted] = useState(false);
   const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
+
+  useImperativeHandle(ref, () => ({
+    scrollToTargetIndex: (val) => {
+      setSelectedIndex(val);
+      sView?.current?.scrollTo({ y: val * itemHeight });
+    },
+  }));
 
   const wrapperHeight =
     props.wrapperHeight ||
@@ -242,8 +251,8 @@ export default function ScrollPicker({
       </CustomScrollViewComponent>
     </View>
   );
-}
-
+});
+export default ScrollPicker;
 const styles = StyleSheet.create({
   itemWrapper: {
     height: 30,
