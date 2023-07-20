@@ -15,6 +15,7 @@
 ---
 
 ## Table of Contents
+
 1. [Features](#features)
 2. [Installation](#installation)
 3. [Usage](#usage)
@@ -33,14 +34,14 @@ npm install react-native-wheel-scrollview-picker --save
 ## Usage
 
 ```jsx
-import React, { Component } from 'react';
-import ScrollPicker from 'react-native-wheel-scrollview-picker';
+import React, { Component } from "react";
+import ScrollPicker from "react-native-wheel-scrollview-picker";
 
 export default class SimpleExample extends Component {
   render() {
     return (
       <ScrollPicker
-        dataSource={['1', '2', '3', '4', '5', '6']}
+        dataSource={["1", "2", "3", "4", "5", "6"]}
         selectedIndex={1}
         renderItem={(data, index) => {
           //
@@ -50,9 +51,9 @@ export default class SimpleExample extends Component {
         }}
         wrapperHeight={180}
         wrapperWidth={150}
-        wrapperColor='#FFFFFF'
+        wrapperColor="#FFFFFF"
         itemHeight={60}
-        highlightColor='#d8d8d8'
+        highlightColor="#d8d8d8"
         highlightBorderWidth={2}
       />
     );
@@ -74,6 +75,42 @@ export default class SimpleExample extends Component {
 | highlightBorderWidth |    width of the indicator     | string |         1 |
 | activeItemTextStyle  | Active Item Text object style | object |           |
 | itemTextStyle        |    Item Text object style     | object |           |
+
+## Extra
+
+If you want to scroll to target index, you need the instance function, and that is exposed some functions to parent components by using `useImperativeHandle` ,you can use it。
+
+```jsx
+import React from "react";
+import { Button } from 'react-native';
+import ScrollPicker from "react-native-wheel-scrollview-picker";
+
+const dataSource = ["1", "2", "3", "4", "5", "6"]
+export const Demo = () => {
+  const ref = React.useRef();
+  const [index, setIndex] = React.useState(0);
+  const onValueChange = (data, selectedIndex) => {
+    setIndex(selectedIndex);
+  };
+
+  const onNext = () => {
+    if (index === dataSource.length - 1) return;
+    setIndex(index + 1);
+    ref.current && ref.current.scrollToTargetIndex(index + 1);
+  }
+  return (
+    <ScrollPicker
+      ref={ref}
+      dataSource={dataSource}
+      selectedIndex={index}
+    />
+    <Button
+      onPress={onNext}
+      title="Next one"
+    />
+  );
+};
+```
 
 ## Author
 
