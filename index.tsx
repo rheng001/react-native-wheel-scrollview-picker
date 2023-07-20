@@ -69,7 +69,7 @@ export default function ScrollPicker({
   const [isScrollTo, setIsScrollTo] = useState(false);
   const [dragStarted, setDragStarted] = useState(false);
   const [momentumStarted, setMomentumStarted] = useState(false);
-  const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
+  const [timer, setTimer] = useState<number | null>(null);
 
   const wrapperHeight =
     props.wrapperHeight ||
