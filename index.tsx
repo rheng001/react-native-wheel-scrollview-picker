@@ -71,10 +71,10 @@ const ScrollPicker = React.forwardRef((propsState: ScrollPickerProps, ref) => {
   const [isScrollTo, setIsScrollTo] = useState(false);
   const [dragStarted, setDragStarted] = useState(false);
   const [momentumStarted, setMomentumStarted] = useState(false);
-  const [timer, setTimer] = useState<number | null>(null);
+  const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
 
   useImperativeHandle(ref, () => ({
-    scrollToTargetIndex: (val) => {
+    scrollToTargetIndex: (val: number) => {
       setSelectedIndex(val);
       sView?.current?.scrollTo({ y: val * itemHeight });
     },
