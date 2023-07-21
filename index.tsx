@@ -52,9 +52,11 @@ export type ScrollPickerProps = {
   ) => JSX.Element;
   highlightColor?: string;
   highlightBorderWidth?: number;
+  itemTextStyle: object;
+  activeItemTextStyle: object;
   itemHeight?: number;
   wrapperHeight?: number;
-  wrapperColor?: string;
+  wrapperBackground?: string;
   // TODO: add proper type to `scrollViewComponent` prop
   // tried using ComponentType<ScrollViewProps & { ref: React.RefObject<ScrollView> }>
   // but ScrollView component from react-native-gesture=handler is not compatible with this.
@@ -122,8 +124,12 @@ const ScrollPicker = React.forwardRef((propsState: ScrollPickerProps, ref) => {
       <Text
         style={
           isSelected
-            ? [styles.itemText, styles.itemTextSelected]
-            : styles.itemText
+            ? [
+                props.activeItemTextStyle
+                  ? props.activeItemTextStyle
+                  : styles.activeItemTextStyle,
+              ]
+            : [props.itemTextStyle ? props.itemTextStyle : styles.itemTextStyle]
         }
       >
         {data}
@@ -211,7 +217,7 @@ const ScrollPicker = React.forwardRef((propsState: ScrollPickerProps, ref) => {
   const wrapperStyle: ViewStyle = {
     height: wrapperHeight,
     flex: 1,
-    backgroundColor: props.wrapperColor || "#fafafa",
+    backgroundColor: props.wrapperBackground || "#fafafa",
     overflow: "hidden",
   };
 
@@ -253,16 +259,17 @@ const ScrollPicker = React.forwardRef((propsState: ScrollPickerProps, ref) => {
   );
 });
 export default ScrollPicker;
+
 const styles = StyleSheet.create({
   itemWrapper: {
     height: 30,
     justifyContent: "center",
     alignItems: "center",
   },
-  itemText: {
+  itemTextStyle: {
     color: "#999",
   },
-  itemTextSelected: {
+  activeItemTextStyle: {
     color: "#333",
   },
 });

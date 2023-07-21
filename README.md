@@ -50,7 +50,6 @@ export default class SimpleExample extends Component {
           //
         }}
         wrapperHeight={180}
-        wrapperWidth={150}
         wrapperColor="#FFFFFF"
         itemHeight={60}
         highlightColor="#d8d8d8"
@@ -68,7 +67,6 @@ export default class SimpleExample extends Component {
 | dataSource           |      Data of the picker       | Array  |           |
 | selectedIndex        |  selected index of the item   | number |         1 |
 | wrapperHeight        |     height of the picker      | number |           |
-| wrapperWidth         |      width of the picker      | number |           |
 | wrapperBackground    |       picker background       | string |    '#FFF' |
 | itemHeight           |      height of each item      | number |           |
 | highlightColor       |  color of the indicator line  | number | "#d8d8d8" |
