@@ -50,7 +50,7 @@ export default class SimpleExample extends Component {
           //
         }}
         wrapperHeight={180}
-        wrapperColor="#FFFFFF"
+        wrapperBackground="#FFFFFF"
         itemHeight={60}
         highlightColor="#d8d8d8"
         highlightBorderWidth={2}
