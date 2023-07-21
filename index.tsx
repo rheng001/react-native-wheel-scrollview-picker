@@ -52,8 +52,8 @@ export type ScrollPickerProps = {
   ) => JSX.Element;
   highlightColor?: string;
   highlightBorderWidth?: number;
-  itemTextStyle: object;
-  activeItemTextStyle: object;
+  itemTextStyle?: object;
+  activeItemTextStyle?: object;
   itemHeight?: number;
   wrapperHeight?: number;
   wrapperBackground?: string;
