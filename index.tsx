@@ -4,6 +4,8 @@ import React, {
   useRef,
   useState,
   useImperativeHandle,
+  ReactNode,
+  Ref,
 } from "react";
 import {
   Dimensions,
@@ -37,16 +39,16 @@ const isViewStyle = (style: ViewProps["style"]): style is ViewStyle => {
   );
 };
 
-export type ScrollPickerProps = {
+export type ScrollPickerProps<ItemT extends string | number> = {
   style?: ViewProps["style"];
-  dataSource: Array<string | number>;
+  dataSource: Array<ItemT>;
   selectedIndex?: number;
   onValueChange?: (
-    value: ScrollPickerProps["dataSource"][0],
+    value: ItemT,
     index: number
   ) => void;
   renderItem?: (
-    data: ScrollPickerProps["dataSource"][0],
+    data: ItemT,
     index: number,
     isSelected: boolean
   ) => JSX.Element;
@@ -63,7 +65,11 @@ export type ScrollPickerProps = {
   scrollViewComponent?: any;
 };
 
-const ScrollPicker = React.forwardRef((propsState: ScrollPickerProps, ref) => {
+export type ScrollPickerHandle = {
+  scrollToTargetIndex: (val: number) => void;
+}
+
+const ScrollPicker: { <ItemT extends string | number>(props: ScrollPickerProps<ItemT> & { ref?: Ref<ScrollPickerHandle> }): ReactNode } = React.forwardRef((propsState, ref) => {
   const { itemHeight = 30, style, scrollViewComponent, ...props } = propsState;
   const [initialized, setInitialized] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(
@@ -114,7 +120,7 @@ const ScrollPicker = React.forwardRef((propsState: ScrollPickerProps, ref) => {
   };
 
   const renderItem = (
-    data: ScrollPickerProps["dataSource"][0],
+    data: typeof props.dataSource[0],
     index: number
   ) => {
     const isSelected = index === selectedIndex;
