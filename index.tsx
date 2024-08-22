@@ -218,7 +218,7 @@ const ScrollPicker: { <ItemT extends string | number>(props: ScrollPickerProps<I
   const highlightWidth = (isViewStyle(style) ? style.width : 0) || deviceWidth;
   const highlightColor = props.highlightColor || "#333";
   const highlightBorderWidth =
-    props.highlightBorderWidth || StyleSheet.hairlineWidth;
+    props.highlightBorderWidth ?? StyleSheet.hairlineWidth;
 
   const wrapperStyle: ViewStyle = {
     height: wrapperHeight,
