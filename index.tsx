@@ -44,7 +44,7 @@ export type ScrollPickerProps<ItemT extends string | number> = {
   dataSource: Array<ItemT>;
   selectedIndex?: number;
   onValueChange?: (
-    value: ItemT,
+    value: ItemT | undefined,
     index: number
   ) => void;
   renderItem?: (
