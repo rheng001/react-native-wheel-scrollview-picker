@@ -13,6 +13,7 @@ import {
   NativeSyntheticEvent,
   Platform,
   ScrollView,
+  ScrollViewProps,
   StyleSheet,
   Text,
   View,
@@ -63,7 +64,7 @@ export type ScrollPickerProps<ItemT extends string | number> = {
   // tried using ComponentType<ScrollViewProps & { ref: React.RefObject<ScrollView> }>
   // but ScrollView component from react-native-gesture=handler is not compatible with this.
   scrollViewComponent?: any;
-};
+} & ScrollViewProps;
 
 export type ScrollPickerHandle = {
   scrollToTargetIndex: (val: number) => void;
