@@ -257,6 +257,7 @@ const ScrollPicker: { <ItemT extends string | number>(props: ScrollPickerProps<I
         onScrollEndDrag={(e: NativeSyntheticEvent<NativeScrollEvent>) =>
           onScrollEndDrag(e)
         }
+        {...props}
       >
         {header}
         {props.dataSource.map(renderItem)}
