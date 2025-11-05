@@ -9,6 +9,7 @@ import React, {
 } from "react";
 import {
   Dimensions,
+  DimensionValue,
   NativeScrollEvent,
   NativeSyntheticEvent,
   Platform,
@@ -60,6 +61,9 @@ export type ScrollPickerProps<ItemT extends string | number> = {
   itemHeight?: number;
   wrapperHeight?: number;
   wrapperBackground?: string;
+  wrapperWidth?: DimensionValue;
+  overlayItem?: () => ReactNode;
+  borderRadius: number;
   // TODO: add proper type to `scrollViewComponent` prop
   // tried using ComponentType<ScrollViewProps & { ref: React.RefObject<ScrollView> }>
   // but ScrollView component from react-native-gesture=handler is not compatible with this.
@@ -71,7 +75,7 @@ export type ScrollPickerHandle = {
 }
 
 const ScrollPicker: { <ItemT extends string | number>(props: ScrollPickerProps<ItemT> & { ref?: Ref<ScrollPickerHandle> }): ReactNode } = React.forwardRef((propsState, ref) => {
-  const { itemHeight = 30, style, scrollViewComponent, ...props } = propsState;
+  const { itemHeight = 30, style, scrollViewComponent, wrapperWidth, overlayItem, borderRadius, ...props } = propsState;
   const [initialized, setInitialized] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(
     props.selectedIndex && props.selectedIndex >= 0 ? props.selectedIndex : 0
@@ -223,6 +227,7 @@ const ScrollPicker: { <ItemT extends string | number>(props: ScrollPickerProps<I
 
   const wrapperStyle: ViewStyle = {
     height: wrapperHeight,
+    width: wrapperWidth,
     flex: 1,
     backgroundColor: props.wrapperBackground || "#fafafa",
     overflow: "hidden",
@@ -233,17 +238,22 @@ const ScrollPicker: { <ItemT extends string | number>(props: ScrollPickerProps<I
     top: (wrapperHeight - itemHeight) / 2,
     height: itemHeight,
     width: highlightWidth,
-    borderTopColor: highlightColor,
-    borderBottomColor: highlightColor,
-    borderTopWidth: highlightBorderWidth,
-    borderBottomWidth: highlightBorderWidth,
+    borderColor: highlightColor,
+    borderWidth: highlightBorderWidth,
+    borderRadius: borderRadius || 0,
   };
 
   const CustomScrollViewComponent = scrollViewComponent || ScrollView;
 
   return (
     <View style={wrapperStyle}>
-      <View style={highlightStyle} />
+      <View style={highlightStyle} >
+        {overlayItem && (
+          <View>
+            {overlayItem()}
+          </View>
+        )}
+      </View>
       <CustomScrollViewComponent
         ref={sView}
         bounces={false}
