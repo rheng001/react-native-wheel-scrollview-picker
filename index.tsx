@@ -150,11 +150,11 @@ const ScrollPicker: { <ItemT extends string | number>(props: ScrollPickerProps<I
     );
   };
   const scrollFix = useCallback(
-    (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    (e: NativeScrollEvent) => {
       let y = 0;
       const h = itemHeight;
-      if (e.nativeEvent.contentOffset) {
-        y = e.nativeEvent.contentOffset.y;
+      if (e.contentOffset) {
+        y = e.contentOffset.y;
       }
       const _selectedIndex = Math.round(y / h);
 
@@ -191,13 +191,13 @@ const ScrollPicker: { <ItemT extends string | number>(props: ScrollPickerProps<I
   const onScrollEndDrag = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     setDragStarted(false);
 
-    // if not used, event will be garbaged
-    const _e: NativeSyntheticEvent<NativeScrollEvent> = { ...e };
+    // Save the native payload before the synthetic event is released.
+    const nativeEvent = e.nativeEvent;
     timer && clearTimeout(timer);
     setTimer(
       setTimeout(() => {
         if (!momentumStarted) {
-          scrollFix(_e);
+          scrollFix(nativeEvent);
         }
       }, 50)
     );
@@ -211,7 +211,7 @@ const ScrollPicker: { <ItemT extends string | number>(props: ScrollPickerProps<I
     setMomentumStarted(false);
 
     if (!isScrollTo && !dragStarted) {
-      scrollFix(e);
+      scrollFix(e.nativeEvent);
     }
   };
 
